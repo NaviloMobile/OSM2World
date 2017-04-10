@@ -42,6 +42,7 @@ import org.osm2world.core.target.common.material.Material;
 import org.osm2world.core.target.common.material.Materials;
 import org.osm2world.core.target.common.material.TexCoordFunction;
 import org.osm2world.core.world.data.TerrainBoundaryWorldObject;
+import org.osm2world.core.world.modules.SurfaceAreaModule.SurfaceArea;
 import org.osm2world.core.world.modules.common.ConfigurableWorldModule;
 import org.osm2world.core.world.network.AbstractNetworkWaySegmentWorldObject;
 import org.osm2world.core.world.network.JunctionNodeWorldObject;
@@ -208,8 +209,13 @@ public class RoadModule extends ConfigurableWorldModule {
 		} else {
 			result = defaultSurface;
 		}
-		
-		return getSurfaceMaterial(tags.getValue("surface"), result);
+		String new_surface_value = null;
+		for (Tag tagWithDefault : Materials.defaultSurfaceMap.keySet()) {
+			if (tags.contains(tagWithDefault)) {
+				new_surface_value = Materials.defaultSurfaceMap.get(tagWithDefault);
+			}
+		}	
+		return getSurfaceMaterial(new_surface_value, result);
 		
 	}
 	
@@ -225,8 +231,13 @@ public class RoadModule extends ConfigurableWorldModule {
 		} else {
 			result = defaultSurface;
 		}
-		
-		result = getSurfaceMaterial(tags.getValue("surface:middle"), result);
+		String new_surface_value = null;
+		for (Tag tagWithDefault : Materials.defaultSurfaceMap.keySet()) {
+			if (tags.contains(tagWithDefault)) {
+				new_surface_value = Materials.defaultSurfaceMap.get(tagWithDefault);
+			}
+		}
+		result = getSurfaceMaterial(new_surface_value/*tags.getValue("surface:middle")*/, result);
 		
 		if (result == GRASS) {
 			result = TERRAIN_DEFAULT;

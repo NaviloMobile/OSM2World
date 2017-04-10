@@ -51,22 +51,6 @@ import org.osm2world.core.world.modules.common.AbstractModule;
  */
 public class SurfaceAreaModule extends AbstractModule {
 	
-	/** assumptions about default surfaces for certain tags */
-	private static final Map<Tag, String> defaultSurfaceMap
-		= new HashMap<Tag, String>();
-	
-	static {
-		defaultSurfaceMap.put(new Tag("leisure", "pitch"), "ground");
-		defaultSurfaceMap.put(new Tag("landuse", "construction"), "ground");
-		defaultSurfaceMap.put(new Tag("golf", "bunker"), "sand");
-		defaultSurfaceMap.put(new Tag("golf", "green"), "grass");
-		defaultSurfaceMap.put(new Tag("natural", "sand"), "sand");
-		defaultSurfaceMap.put(new Tag("natural", "beach"), "sand");
-		defaultSurfaceMap.put(new Tag("landuse", "meadow"), "grass");
-		defaultSurfaceMap.put(new Tag("landuse", "grass"), "grass");
-		defaultSurfaceMap.put(new Tag("natural", "scrub"), "scrub");
-	}
-	
 	@Override
 	protected void applyToArea(MapArea area) {
 		
@@ -78,10 +62,10 @@ public class SurfaceAreaModule extends AbstractModule {
 			area.addRepresentation(new SurfaceArea(area, tags.getValue("surface")));
 		} else {
 		
-			for (Tag tagWithDefault : defaultSurfaceMap.keySet()) {
+			for (Tag tagWithDefault : Materials.defaultSurfaceMap.keySet()) {
 				if (tags.contains(tagWithDefault)) {
 					area.addRepresentation(new SurfaceArea(
-							area, defaultSurfaceMap.get(tagWithDefault)));
+							area, Materials.defaultSurfaceMap.get(tagWithDefault)));
 				}
 			}
 			
