@@ -30,4 +30,4 @@ fi
 # export LD_LIBRARY_PATH=$lpsolvepath
 export PATH=$lpsolvepath:$PATH
 
-java -Djava.awt.headless=true -Djava.library.path=$lpsolvepath $vmparams -jar OSM2World.jar --config texture_config.properties $@
+java -Djava.awt.headless=true -Djava.library.path=$lpsolvepath $vmparams -jar build/OSM2World.jar --config texture_config.properties $@
