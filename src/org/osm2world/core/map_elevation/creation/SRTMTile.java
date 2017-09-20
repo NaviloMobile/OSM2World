@@ -20,7 +20,7 @@ class SRTMTile {
 	public static final short BLANK_VALUE = -32768;
 	
 	/** length of each dimension of an SRTM tile in pixels */
-	static final int PIXELS = 1201;
+	static final int PIXELS = 3601;
 		
 	public final File file;
 	private final ShortBuffer data;
@@ -51,7 +51,7 @@ class SRTMTile {
 	
 	public final short getData(int x, int y) {
 		assert 0 <= x && x < PIXELS && 0 <= y && y < PIXELS;
-		return data.get((1200 - y) * 1201 + x);
+		return data.get((PIXELS - 1 - y) * PIXELS + x);
 	}
 	
 	@Override

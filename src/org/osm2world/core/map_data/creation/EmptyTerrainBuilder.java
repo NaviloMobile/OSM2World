@@ -38,8 +38,8 @@ public class EmptyTerrainBuilder {
 			new MapBasedTagGroup(EMPTY_SURFACE_TAG), 0,
 			Collections.<OSMNode>emptyList());
 	
-	public static final double POINT_GRID_DIST = 30;
-	public static final int PATCH_SIZE_POINTS = 10;
+	public static final double POINT_GRID_DIST = 15;
+	public static final int PATCH_SIZE_POINTS = 30;
 	
 	/**
 	 * creates a grid of square {@link MapArea}s to represent empty terrain.
@@ -56,7 +56,7 @@ public class EmptyTerrainBuilder {
 				dataBounds.pad(POINT_GRID_DIST), POINT_GRID_DIST);
 		
 		/* create a grid of nodes (leaving points within the future patches blank) */
-		
+		System.out.println("Grid size: " + posGrid.sizeX() + " " + posGrid.sizeZ());
 		MapNode[][] nodeGrid = new MapNode[posGrid.sizeX()][posGrid.sizeZ()];
 		
 		for (int x = 0; x < posGrid.sizeX(); x++) {
@@ -82,7 +82,7 @@ public class EmptyTerrainBuilder {
 		// calculate the number of patches, but always round up
 		int numPatchesX = (nodeGrid.length + PATCH_SIZE_POINTS - 2) / PATCH_SIZE_POINTS;
 		int numPatchesZ = (nodeGrid[0].length + PATCH_SIZE_POINTS - 2) / PATCH_SIZE_POINTS;
-
+		System.out.println("numPatchesX: " + numPatchesX + " numPatchesZ: " + numPatchesZ);
 		for (int patchX = 0; patchX < numPatchesX; patchX++) {
 			for (int z = 0; z < numPatchesZ; z++) {
 				
