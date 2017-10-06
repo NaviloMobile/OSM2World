@@ -562,19 +562,18 @@ public class RoadModule extends ConfigurableWorldModule {
 			
 			Material material = getSurfaceForNode(node);
 			Collection<TriangleXYZ> triangles = super.getTriangulation();
-			
 			target.drawTriangles(material, triangles,
 					triangleTexCoordLists(triangles, material, GLOBAL_X_Z));
 			
 			/* connect some lanes such as sidewalks between adjacent roads */
-			
+			/*
 			List<LaneConnection> connections = buildLaneConnections(
 					node, true, false);
 			
 			for (LaneConnection connection : connections) {
 				connection.renderTo(target);
 			}
-			
+			*/
 		}
 		
 		@Override
@@ -1805,7 +1804,6 @@ public class RoadModule extends ConfigurableWorldModule {
 			
 			Material surface = getSurface(roadTags, laneTags);
 			Material surfaceMiddle = getSurfaceMiddle(roadTags, laneTags);
-						
 			/* draw lane triangle strips */
 			
 			if (surfaceMiddle == null || surfaceMiddle.equals(surface)) {
@@ -1856,7 +1854,6 @@ public class RoadModule extends ConfigurableWorldModule {
 		}
 		
 		protected Material getSurface(TagGroup roadTags, TagGroup laneTags) {
-			
 			return getSurfaceMaterial(laneTags.getValue("surface"),
 					getSurfaceForRoad(roadTags, ASPHALT));
 			
