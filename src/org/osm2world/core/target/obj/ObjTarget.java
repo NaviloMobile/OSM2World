@@ -176,8 +176,9 @@ public class ObjTarget extends FaceTarget<RenderableToObj> {
 			if (name == null) {
 				name = Materials.getUniqueName(material);
 				if (name == null) {
-					name = "MAT_" + anonymousMaterialCounter;
-					anonymousMaterialCounter += 1;
+					//name = "MAT_" + anonymousMaterialCounter;
+					//anonymousMaterialCounter += 1;
+					name = "RGB_" + material.getColor().getRed() + "_" + material.getColor().getGreen() + "_" + material.getColor().getBlue();
 				}
 				materialMap.put(material, name);
 				writeMaterial(material, name);
