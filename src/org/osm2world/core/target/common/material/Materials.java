@@ -223,6 +223,8 @@ public final class Materials {
 			new ConfMaterial(Interpolation.FLAT, new Color(0x46673b));
 	public static final ConfMaterial PARK =
 			new ConfMaterial(Interpolation.FLAT, new Color(0xc8facc));         // Lch(94,30,145) also recreation_ground
+	public static final ConfMaterial PLAYGROUND =
+			new ConfMaterial(Interpolation.FLAT, new Color(0xc8facc));
 	public static final ConfMaterial ORCHARD =
 			new ConfMaterial(Interpolation.FLAT, new Color(0xaedfa3)); // also vineyard, plant_nursery
 	// --- "Base" landuses ---
@@ -240,8 +242,16 @@ public final class Materials {
 			new ConfMaterial(Interpolation.FLAT, new Color(0xd1b2b0));  // Lch(75,12,25)
 	public static final ConfMaterial INDUSTRIAL =
 			new ConfMaterial(Interpolation.FLAT, new Color(0xebdbe8));       // Lch(89,9,330) (Also used for railway)
+	public static final ConfMaterial POWER =
+			new ConfMaterial(Interpolation.FLAT, new Color(0xebdbe8));
+	public static final ConfMaterial RAILWAY =
+			new ConfMaterial(Interpolation.FLAT, new Color(0xebdbe8));
 	public static final ConfMaterial INDUSTRIAL_LINE =
 			new ConfMaterial(Interpolation.FLAT, new Color(0xc6b3c3));  // Lch(75,11,330) (Also used for railway-line)
+	public static final ConfMaterial RAILWAY_LINE = 
+			new ConfMaterial(Interpolation.FLAT, new Color(0xc6b3c3));
+	public static final ConfMaterial POWER_LINE = 
+			new ConfMaterial(Interpolation.FLAT, new Color(0xc6b3c3));
 	public static final ConfMaterial FARMLAND =
 			new ConfMaterial(Interpolation.FLAT, new Color(0xfbecd7));         // Lch(94,12,80)
 	public static final ConfMaterial FARMLAND_LINE =
@@ -259,8 +269,6 @@ public final class Materials {
 			new ConfMaterial(Interpolation.FLAT, new Color(0xdfddce));
 	public static final ConfMaterial PARKING =
 			new ConfMaterial(Interpolation.FLAT, new Color(0xf7efb7));
-	public static final ConfMaterial RAILWAY = INDUSTRIAL;
-	public static final ConfMaterial RAILWAY_LINE = INDUSTRIAL_LINE;
 	public static final ConfMaterial REST_AREA =
 			new ConfMaterial(Interpolation.FLAT, new Color(0xefc8c8)); // also services
 	public static final ConfMaterial STATION =
@@ -286,13 +294,12 @@ public final class Materials {
 			new ConfMaterial(Interpolation.FLAT, new Color(0xcdccc9));
 	public static final ConfMaterial PLACE_OF_WORSHIP_OUTLINE =
 			new ConfMaterial(Interpolation.FLAT, new Color(0x111));
-	public static final ConfMaterial PLAYGROUND = PARK;
-	public static final ConfMaterial POWER = INDUSTRIAL;
-	public static final ConfMaterial POWER_LINE = INDUSTRIAL_LINE;
 	/*public static final ConfMaterial SAND =
 			new ConfMaterial(Interpolation.FLAT, new Color(0xf5e9c6));*/
 	public static final ConfMaterial SOCIETAL_AMENITIES =
 			new ConfMaterial(Interpolation.FLAT, new Color(0xf0f0d8));
+	public static final ConfMaterial STADIUM =
+			new ConfMaterial(Interpolation.FLAT, new Color(0xf0f0d8)); // also fitness_centre and sports_centre
 	public static final ConfMaterial TOURISM =
 			new ConfMaterial(Interpolation.FLAT, new Color(0x734a08));
 	public static final ConfMaterial QUARRY =
@@ -304,8 +311,8 @@ public final class Materials {
 	// --- Sports ---
 	public static final ConfMaterial PITCH =
 			new ConfMaterial(Interpolation.FLAT, new Color(0xaae0cb)); // also track
-	public static final ConfMaterial TRACK = PITCH;
-	public static final ConfMaterial STADIUM = SOCIETAL_AMENITIES; // also fitness_centre and sports_centre
+	public static final ConfMaterial TRACK = 
+			new ConfMaterial(Interpolation.FLAT, new Color(0xaae0cb));
 	public static final ConfMaterial GOLF_COURSE =
 			new ConfMaterial(Interpolation.FLAT, new Color(0xb5e3b5));
 	// From https://github.com/gravitystorm/openstreetmap-carto/blob/master/road-colors-generated.mss
@@ -322,7 +329,10 @@ public final class Materials {
 			new ConfMaterial(Interpolation.FLAT, new Color(0xffffff));
 	public static final ConfMaterial RESIDENTIAL_FILL =
 			new ConfMaterial(Interpolation.FLAT, new Color(0xffffff));
-	public static final ConfMaterial SERVICE_FILL = RESIDENTIAL_FILL;
+	public static final ConfMaterial RESIDENTIAL_AREA_FILL =
+			new ConfMaterial(Interpolation.FLAT, new Color(0xffffff));
+	public static final ConfMaterial SERVICE_FILL = 
+			new ConfMaterial(Interpolation.FLAT, new Color(0xffffff));
 	public static final ConfMaterial LIVING_STREET_FILL =
 			new ConfMaterial(Interpolation.FLAT, new Color(0xededed));
 	public static final ConfMaterial PEDESTRIAN_FILL =
@@ -421,6 +431,7 @@ public final class Materials {
 		surfaceMaterialMap.put("secondary", SECONDARY_FILL);
 		surfaceMaterialMap.put("tertiary", TERTIARY_FILL);
 		surfaceMaterialMap.put("residential", RESIDENTIAL_FILL);
+		surfaceMaterialMap.put("residential_area", RESIDENTIAL_AREA_FILL);
 		surfaceMaterialMap.put("service", SERVICE_FILL);
 		surfaceMaterialMap.put("living-street", LIVING_STREET_FILL);
 		surfaceMaterialMap.put("pedestrian", PEDESTRIAN_FILL);
@@ -475,8 +486,8 @@ public final class Materials {
 		defaultSurfaceMap.put(new Tag("wetland", "wet_meadow"), "grass");
 		defaultSurfaceMap.put(new Tag("wetland", "fen"), "grass");
 		defaultSurfaceMap.put(new Tag("wetland", "marsh"), "grass");
-		defaultSurfaceMap.put(new Tag("landuse", "residential"), "residential");
-		defaultSurfaceMap.put(new Tag("landuse", "garages"), "residential");
+		defaultSurfaceMap.put(new Tag("landuse", "residential"), "residential_area");
+		defaultSurfaceMap.put(new Tag("landuse", "garages"), "residential_area");
 		defaultSurfaceMap.put(new Tag("landuse", "allotments"), "allotments");
 		defaultSurfaceMap.put(new Tag("landuse", "forest"), "forest");
 		defaultSurfaceMap.put(new Tag("landuse", "farmyard"), "farmyard");
@@ -520,7 +531,6 @@ public final class Materials {
 		defaultSurfaceMap.put(new Tag("highway", "residential"), "residential");
 		defaultSurfaceMap.put(new Tag("highway", "service"), "service");
 		defaultSurfaceMap.put(new Tag("highway", "living-street"), "living-street");
-		defaultSurfaceMap.put(new Tag("highway", "service"), "service");
 		defaultSurfaceMap.put(new Tag("highway", "pedestrian"), "pedestrian");
 		defaultSurfaceMap.put(new Tag("highway", "raceway"), "raceway");
 		defaultSurfaceMap.put(new Tag("highway", "footway"), "footway");
