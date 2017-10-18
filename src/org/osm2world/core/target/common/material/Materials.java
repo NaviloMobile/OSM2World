@@ -330,7 +330,7 @@ public final class Materials {
 	public static final ConfMaterial RESIDENTIAL_FILL =
 			new ConfMaterial(Interpolation.FLAT, new Color(0xffffff));
 	public static final ConfMaterial RESIDENTIAL_AREA_FILL =
-			new ConfMaterial(Interpolation.FLAT, new Color(0xffffff));
+			new ConfMaterial(Interpolation.FLAT, new Color(0xe0dfdf));
 	public static final ConfMaterial SERVICE_FILL = 
 			new ConfMaterial(Interpolation.FLAT, new Color(0xffffff));
 	public static final ConfMaterial LIVING_STREET_FILL =
