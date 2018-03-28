@@ -24,7 +24,7 @@ class SRTMTile {
 	static final int N_PIXELS_90M = 1201;
 	
 	/** length of each dimension of an SRTM tile in pixels */
-	static int PIXELS = 3601;
+	static int PIXELS = N_PIXELS_90M; //Safety net
 		
 	public final File file;
 	private final ShortBuffer data;

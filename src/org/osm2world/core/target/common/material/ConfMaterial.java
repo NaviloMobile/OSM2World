@@ -34,6 +34,10 @@ public class ConfMaterial extends Material {
 		super(interpolation, color);
 	}
 	
+	public ConfMaterial(Interpolation interpolation, Color color, int materialQuality) {
+		super(interpolation, color, materialQuality);
+	}
+	
 	public void setInterpolation(Interpolation interpolation) {
 		this.interpolation = interpolation;
 	}

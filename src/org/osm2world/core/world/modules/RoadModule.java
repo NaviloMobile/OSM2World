@@ -168,26 +168,28 @@ public class RoadModule extends ConfigurableWorldModule {
 	 * Otherwise, the result depends on the surface values of adjacent roads.
 	 */
 	private static Material getSurfaceForNode(MapNode node) {
-		
 		Material surface = getSurfaceMaterial(
 				node.getTags().getValue("surface"), null);
-		
-		if (surface == null) {
-			
-			/* choose the surface of any adjacent road */
-			
+		if (surface == null) {	
+			/* choose the surface of the adjacent road with a "better" surface */
+			Material bestSurface = surface;
+			int bestQuality = Integer.MAX_VALUE;
 			for (MapWaySegment segment : node.getConnectedWaySegments()) {
-				
 				if (segment.getPrimaryRepresentation() instanceof Road) {
 					Road road = (Road)segment.getPrimaryRepresentation();
 					surface = road.getSurface();
-					break;
+					int materialQuality = surface.getMaterialQuality();
+					if (materialQuality < bestQuality) {
+						bestQuality = materialQuality;
+						bestSurface = surface;
+					}
 				}
-				
 			}
-			
+			surface = bestSurface;
 		}
-		
+		if (surface == null) {	 
+			surface = ASPHALT;
+		}
 		return surface;
 		
 	}

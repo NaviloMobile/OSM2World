@@ -43,29 +43,29 @@ public final class Materials {
 			new ConfMaterial(Interpolation.FLAT, Color.BLUE);
 	
 	public static final ConfMaterial ASPHALT =
-		new ConfMaterial(Interpolation.FLAT, new Color(0.3f, 0.3f, 0.3f));
+		new ConfMaterial(Interpolation.FLAT, new Color(0.3f, 0.3f, 0.3f), 0);
 	public static final ConfMaterial BRICK =
 		new ConfMaterial(Interpolation.FLAT, new Color(1.0f, 0.5f, 0.25f));
 	public static final ConfMaterial COBBLESTONE =
 		new ConfMaterial(Interpolation.FLAT, new Color(0.3f, 0.3f, 0.3f));
 	public static final ConfMaterial CONCRETE =
-		new ConfMaterial(Interpolation.FLAT, new Color(0.55f, 0.55f, 0.55f));
+		new ConfMaterial(Interpolation.FLAT, new Color(0.55f, 0.55f, 0.55f), 1);
 	public static final ConfMaterial EARTH =
-		new ConfMaterial(Interpolation.FLAT, new Color(0.3f, 0, 0));
+		new ConfMaterial(Interpolation.FLAT, new Color(0.3f, 0, 0), 6);
 	public static final ConfMaterial GLASS =
 		new ConfMaterial(Interpolation.FLAT, new Color(0.9f, 0.9f, 0.9f));
 	public static final ConfMaterial GRASS =
-		new ConfMaterial(Interpolation.FLAT, new Color(0.0f, 0.8f, 0.0f));
+		new ConfMaterial(Interpolation.FLAT, new Color(0.0f, 0.8f, 0.0f), 7);
 	public static final ConfMaterial GRASS_PAVER =
 		new ConfMaterial(Interpolation.FLAT, new Color(0.3f, 0.5f, 0.3f));
 	public static final ConfMaterial SCRUB =
 		new ConfMaterial(Interpolation.FLAT, new Color(0.0f, 0.8f, 0.0f));
 	public static final ConfMaterial GRAVEL =
-		new ConfMaterial(Interpolation.FLAT, new Color(0.4f, 0.4f, 0.4f));
+		new ConfMaterial(Interpolation.FLAT, new Color(0.4f, 0.4f, 0.4f), 4);
 	public static final ConfMaterial PAVING_STONE =
-			new ConfMaterial(Interpolation.FLAT, new Color(0.4f, 0.4f, 0.4f));
+			new ConfMaterial(Interpolation.FLAT, new Color(0.4f, 0.4f, 0.4f), 2);
 	public static final ConfMaterial PEBBLESTONE =
-			new ConfMaterial(Interpolation.FLAT, new Color(0.4f, 0.4f, 0.4f));
+			new ConfMaterial(Interpolation.FLAT, new Color(0.4f, 0.4f, 0.4f), 3);
 	public static final ConfMaterial PLASTIC =
 			new ConfMaterial(Interpolation.FLAT, new Color(0, 0, 0));
 	public static final ConfMaterial PLASTIC_GREY =
@@ -75,7 +75,7 @@ public final class Materials {
 	public static final ConfMaterial STEEL =
 		new ConfMaterial(Interpolation.FLAT, new Color(200, 200, 200));
 	public static final ConfMaterial WOOD =
-		new ConfMaterial(Interpolation.FLAT, new Color(0.3f, 0.2f, 0.2f));
+		new ConfMaterial(Interpolation.FLAT, new Color(0.3f, 0.2f, 0.2f), 5);
 	public static final ConfMaterial WOOD_WALL =
 		new ConfMaterial(Interpolation.FLAT, new Color(0.3f, 0.2f, 0.2f));
 	public static final ConfMaterial TARTAN =

@@ -54,6 +54,8 @@ public abstract class Material {
 	protected TextureData bumpMap;
 	protected int bumpMapInd;
 
+	protected int quality = Integer.MAX_VALUE; //A measure of relative quality, for choosing the "best" material to paint a junction from the roads leading up to it. 0 is best, higher is worse.
+	
 	public Material(Interpolation interpolation, Color color,
 			float ambientFactor, float diffuseFactor, float specularFactor, int shininess, 
 			Transparency transparency, Shadow shadow, AmbientOcclusion ao, List<TextureData> textureDataList) {
@@ -95,6 +97,11 @@ public abstract class Material {
 	public Material(Interpolation interpolation, Color color) {
 		this(interpolation, color, Transparency.FALSE,
 				Collections.<TextureData>emptyList());
+	}
+	
+	public Material(Interpolation interpolation, Color color, int materialQuality) {
+		this(interpolation, color);
+		quality = materialQuality;
 	}
 		
 	public Interpolation getInterpolation() {
@@ -225,4 +232,7 @@ public abstract class Material {
 	 * as well as brilliance, phong, metallic, reflection, crand and iridescence for POVRay
 	 */
 	
+	public int getMaterialQuality() {
+		return this.quality;
+	}
 }
