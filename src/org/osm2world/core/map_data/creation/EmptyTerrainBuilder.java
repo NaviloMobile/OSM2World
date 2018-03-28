@@ -38,8 +38,8 @@ public class EmptyTerrainBuilder {
 			new MapBasedTagGroup(EMPTY_SURFACE_TAG), 0,
 			Collections.<OSMNode>emptyList());
 	
-	public static final double POINT_GRID_DIST = 15;
-	public static final int PATCH_SIZE_POINTS = 30;
+	public static final double POINT_GRID_DIST = 45; //TODO: this should really depend on the SRTM information density (so whether 1-arc-second or 3, and the latitude)
+	public static int PATCH_SIZE_POINTS = 100;
 	
 	/**
 	 * creates a grid of square {@link MapArea}s to represent empty terrain.
@@ -57,6 +57,10 @@ public class EmptyTerrainBuilder {
 		
 		/* create a grid of nodes (leaving points within the future patches blank) */
 		System.out.println("Grid size: " + posGrid.sizeX() + " " + posGrid.sizeZ());
+		
+		//Ensure there is only one patch:
+		PATCH_SIZE_POINTS = Math.max(posGrid.sizeX(), posGrid.sizeZ());
+		
 		MapNode[][] nodeGrid = new MapNode[posGrid.sizeX()][posGrid.sizeZ()];
 		
 		for (int x = 0; x < posGrid.sizeX(); x++) {

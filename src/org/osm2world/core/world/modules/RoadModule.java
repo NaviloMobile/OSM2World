@@ -42,7 +42,6 @@ import org.osm2world.core.target.common.material.Material;
 import org.osm2world.core.target.common.material.Materials;
 import org.osm2world.core.target.common.material.TexCoordFunction;
 import org.osm2world.core.world.data.TerrainBoundaryWorldObject;
-import org.osm2world.core.world.modules.SurfaceAreaModule.SurfaceArea;
 import org.osm2world.core.world.modules.common.ConfigurableWorldModule;
 import org.osm2world.core.world.network.AbstractNetworkWaySegmentWorldObject;
 import org.osm2world.core.world.network.JunctionNodeWorldObject;
@@ -209,13 +208,8 @@ public class RoadModule extends ConfigurableWorldModule {
 		} else {
 			result = defaultSurface;
 		}
-		String new_surface_value = null;
-		for (Tag tagWithDefault : Materials.defaultSurfaceMap.keySet()) {
-			if (tags.contains(tagWithDefault)) {
-				new_surface_value = Materials.defaultSurfaceMap.get(tagWithDefault);
-			}
-		}	
-		return getSurfaceMaterial(new_surface_value, result);
+		
+		return getSurfaceMaterial(tags.getValue("surface"), result);
 		
 	}
 	
@@ -231,13 +225,8 @@ public class RoadModule extends ConfigurableWorldModule {
 		} else {
 			result = defaultSurface;
 		}
-		String new_surface_value = null;
-		for (Tag tagWithDefault : Materials.defaultSurfaceMap.keySet()) {
-			if (tags.contains(tagWithDefault)) {
-				new_surface_value = Materials.defaultSurfaceMap.get(tagWithDefault);
-			}
-		}
-		result = getSurfaceMaterial(new_surface_value/*tags.getValue("surface:middle")*/, result);
+		
+		result = getSurfaceMaterial(tags.getValue("surface:middle"), result);
 		
 		if (result == GRASS) {
 			result = TERRAIN_DEFAULT;
@@ -562,18 +551,19 @@ public class RoadModule extends ConfigurableWorldModule {
 			
 			Material material = getSurfaceForNode(node);
 			Collection<TriangleXYZ> triangles = super.getTriangulation();
+			
 			target.drawTriangles(material, triangles,
 					triangleTexCoordLists(triangles, material, GLOBAL_X_Z));
 			
 			/* connect some lanes such as sidewalks between adjacent roads */
-			/*
+			
 			List<LaneConnection> connections = buildLaneConnections(
 					node, true, false);
 			
 			for (LaneConnection connection : connections) {
 				connection.renderTo(target);
 			}
-			*/
+			
 		}
 		
 		@Override
@@ -1804,6 +1794,7 @@ public class RoadModule extends ConfigurableWorldModule {
 			
 			Material surface = getSurface(roadTags, laneTags);
 			Material surfaceMiddle = getSurfaceMiddle(roadTags, laneTags);
+						
 			/* draw lane triangle strips */
 			
 			if (surfaceMiddle == null || surfaceMiddle.equals(surface)) {
@@ -1854,6 +1845,7 @@ public class RoadModule extends ConfigurableWorldModule {
 		}
 		
 		protected Material getSurface(TagGroup roadTags, TagGroup laneTags) {
+			
 			return getSurfaceMaterial(laneTags.getValue("surface"),
 					getSurfaceForRoad(roadTags, ASPHALT));
 			
