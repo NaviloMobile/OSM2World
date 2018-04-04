@@ -85,7 +85,7 @@ public class BridgeModule extends AbstractModule {
 
 			drawBridgeUnderside(target);
 						
-			drawBridgePillars(target);
+			//drawBridgePillars(target);
 			
 		}
 
