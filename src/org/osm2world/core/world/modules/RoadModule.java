@@ -1809,7 +1809,7 @@ public class RoadModule extends ConfigurableWorldModule {
 				
 				
 				if (!roadTags.contains("highway", "motorway")) {
-					surface = addTurnArrows(surface, laneTags);
+					//surface = addTurnArrows(surface, laneTags);
 				}
 				
 				target.drawTriangleStrip(surface, vs,
