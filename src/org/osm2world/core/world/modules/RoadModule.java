@@ -1902,6 +1902,10 @@ public class RoadModule extends ConfigurableWorldModule {
 			return (double)parseWidth(laneTags, 1.0f);
 		}
 		
+		@Override
+		protected Material getSurface(TagGroup roadTags, TagGroup laneTags) {
+			return FOOTWAY_FILL;
+		}
 	};
 
 	private static final LaneType SOLID_LINE = new FlatTexturedLane(
