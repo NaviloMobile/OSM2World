@@ -1979,7 +1979,7 @@ public class RoadModule extends ConfigurableWorldModule {
 
 		@Override
 		public double getHeightOffset(TagGroup roadTags, TagGroup laneTags) {
-			return (double)parseHeight(laneTags, 0.0f/*0.12f*/);
+			return (double)parseHeight(laneTags, 0.01f/*0.12f*/);
 		}
 
 	};
