@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -345,10 +346,10 @@ public class RoadModule extends ConfigurableWorldModule {
 		List<Road> roads = getConnectedRoads(node, true);
 		
 		/* check whether the oneway special case applies */
-
+		List<LaneConnection> result = new ArrayList<LaneConnection>();
+		boolean allOneway = true;
 		if (isJunction) {
 						
-			boolean allOneway = true;
 			int firstInboundIndex = -1;
 			
 			for (int i = 0; i < roads.size(); i++) {
@@ -396,8 +397,8 @@ public class RoadModule extends ConfigurableWorldModule {
 				}
 			
 				if (allOneway) {
-					return buildLaneConnections_allOneway(node,
-							inboundOnewayRoads, outboundOnewayRoads);
+					result.addAll(buildLaneConnections_allOneway(node,
+							inboundOnewayRoads, outboundOnewayRoads));
 				}
 				
 			}
@@ -405,19 +406,34 @@ public class RoadModule extends ConfigurableWorldModule {
 		}
 		
 		/* apply normal treatment (not oneway-specific) */
+		if (!isJunction || !allOneway) {
+			for (int i = 0; i < roads.size(); i++) {
+	
+				final Road road1 = roads.get(i);
+				final Road road2 = roads.get(
+						(i+1) % roads.size());
+	
+				addLaneConnectionsForRoadPair(result,
+						node, road1, road2,
+						isJunction, isCrossing);
+			}
+		}
 		
-		List<LaneConnection> result = new ArrayList<LaneConnection>();
-		
+		// Add more dashes connections between roads with similar angles
 		for (int i = 0; i < roads.size(); i++) {
-
-			final Road road1 = roads.get(i);
-			final Road road2 = roads.get(
-					(i+1) % roads.size());
-
-			addLaneConnectionsForRoadPair(result,
-					node, road1, road2,
-					isJunction, isCrossing);
-			
+			for (int j = 0; j < roads.size(); j++) {
+				if (i != j) {
+					final Road road1 = roads.get(i);
+					final Road road2 = roads.get(j);
+					final double COS_EPSILON = Math.PI / 32;
+					double positiveCosAngle = Math.abs(road1.segment.getDirection().dot(road2.segment.getDirection()));
+					if (1.0 - positiveCosAngle < COS_EPSILON) {
+						addLaneConnectionsForRoadPairDashes(result,
+								node, road1, road2,
+								isJunction, isCrossing);
+					}
+				}
+			}
 		}
 		
 		return result;
@@ -487,12 +503,64 @@ public class RoadModule extends ConfigurableWorldModule {
 		
 		final List<Lane> lanes1, lanes2;
 		
-		lanes1 = road1.getLaneLayout().getLanes(
+		lanes1 = road1.getLaneLayout().getLanesPlusDash(
 				isRoad1Inbound ? RoadPart.LEFT : RoadPart.RIGHT);
 
-		lanes2 = road2.getLaneLayout().getLanes(
+		lanes2 = road2.getLaneLayout().getLanesPlusDash(
 				isRoad2Inbound ? RoadPart.RIGHT : RoadPart.LEFT);
 		
+		/* determine which lanes are connected */
+		
+		Map<Integer, Integer> matches =
+				findMatchingLanes(lanes1, lanes2, isJunction, isCrossing);
+		
+		/* build the lane connections */
+		
+		for (int lane1Index : matches.keySet()) {
+			
+			final Lane lane1 = lanes1.get(lane1Index);
+			final Lane lane2 = lanes2.get(matches.get(lane1Index));
+			
+			result.add(buildLaneConnection(lane1, lane2, RoadPart.LEFT,
+					!isRoad1Inbound, !isRoad2Inbound));
+			
+		}
+		
+		//TODO: connect "disappearing" lanes to a point on the other side
+		//      or draw caps (only for connectors)
+		
+	}
+	
+	private static void addLaneConnectionsForRoadPairDashes(
+			List<LaneConnection> result,
+			MapNode node, Road road1, Road road2,
+			boolean isJunction, boolean isCrossing) {
+		
+		/* get some basic info about the roads */
+		
+		final boolean isRoad1Inbound = road1.segment.getEndNode() == node;
+		final boolean isRoad2Inbound = road2.segment.getEndNode() == node;
+		
+		final List<Lane> lanes1, lanes2;
+		
+		lanes1 = road1.getLaneLayout().getLanesPlusDash(
+				isRoad1Inbound ? RoadPart.LEFT : RoadPart.RIGHT);
+
+		lanes2 = road2.getLaneLayout().getLanesPlusDash(
+				isRoad2Inbound ? RoadPart.RIGHT : RoadPart.LEFT);
+		
+		for (Iterator<Lane> iter = lanes1.listIterator(); iter.hasNext(); ) {
+			Lane l = iter.next();
+			if (l.type != DASHED_LINE) {
+				iter.remove();
+			}
+		}
+		for (Iterator<Lane> iter = lanes2.listIterator(); iter.hasNext(); ) {
+			Lane l = iter.next();
+			if (l.type != DASHED_LINE) {
+				iter.remove();
+			}
+		}
 		/* determine which lanes are connected */
 		
 		Map<Integer, Integer> matches =
@@ -1457,6 +1525,27 @@ public class RoadModule extends ConfigurableWorldModule {
 			}
 		}
 		
+		public List<Lane> getLanesPlusDash(RoadPart roadPart) {
+			List<Lane> returnLanes;
+			switch (roadPart) {
+			case LEFT: {
+				returnLanes = new ArrayList<Lane>(leftLanes);
+				if (!rightLanes.isEmpty() && rightLanes.get(0).type == DASHED_LINE && !leftLanes.isEmpty() && leftLanes.get(0).type != DASHED_LINE) {
+					returnLanes.add(0, rightLanes.get(0));
+				}
+				return returnLanes;
+			}
+			case RIGHT: {
+				returnLanes = new ArrayList<Lane>(rightLanes);
+				if (!leftLanes.isEmpty() && leftLanes.get(0).type == DASHED_LINE && !rightLanes.isEmpty() && rightLanes.get(0).type != DASHED_LINE) {
+					returnLanes.add(0, leftLanes.get(0));
+				}
+				return returnLanes;
+			}
+			default: throw new Error("unhandled road part value");
+			}
+		}
+		
 		public List<Lane> getLanesLeftToRight() {
 			List<Lane> result = new ArrayList<Lane>();
 			result.addAll(leftLanes);
@@ -1924,7 +2013,7 @@ public class RoadModule extends ConfigurableWorldModule {
 	};
 
 	private static final LaneType DASHED_LINE = new FlatTexturedLane(
-			"DASHED_LINE", false, false) {
+			"DASHED_LINE", false, true/*false*/) {
 
 		@Override
 		public Double getAbsoluteWidth(TagGroup roadTags, TagGroup laneTags) {
