@@ -503,10 +503,10 @@ public class RoadModule extends ConfigurableWorldModule {
 		
 		final List<Lane> lanes1, lanes2;
 		
-		lanes1 = road1.getLaneLayout().getLanesPlusDash(
+		lanes1 = road1.getLaneLayout().getLanes(
 				isRoad1Inbound ? RoadPart.LEFT : RoadPart.RIGHT);
 
-		lanes2 = road2.getLaneLayout().getLanesPlusDash(
+		lanes2 = road2.getLaneLayout().getLanes(
 				isRoad2Inbound ? RoadPart.RIGHT : RoadPart.LEFT);
 		
 		/* determine which lanes are connected */
