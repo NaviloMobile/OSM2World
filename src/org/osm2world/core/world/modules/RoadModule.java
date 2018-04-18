@@ -420,6 +420,8 @@ public class RoadModule extends ConfigurableWorldModule {
 		}
 		
 		// Add more dashes connections between roads with similar angles
+		List<LaneConnection> bestLaneConnections = new ArrayList<LaneConnection>();
+		float maxRoadsWidth = 0.0f;
 		for (int i = 0; i < roads.size(); i++) {
 			for (int j = 0; j < roads.size(); j++) {
 				if (i != j) {
@@ -428,13 +430,19 @@ public class RoadModule extends ConfigurableWorldModule {
 					final double COS_EPSILON = Math.PI / 32;
 					double positiveCosAngle = Math.abs(road1.segment.getDirection().dot(road2.segment.getDirection()));
 					if (1.0 - positiveCosAngle < COS_EPSILON) {
-						addLaneConnectionsForRoadPairDashes(result,
+						
+						LaneConnectionsRoadWidth laneConnections = getLaneConnectionsForRoadPairDashes(
 								node, road1, road2,
 								isJunction, isCrossing);
+						if (laneConnections.roadWidthSum >= maxRoadsWidth && !laneConnections.laneConnections.isEmpty()) {
+							maxRoadsWidth = laneConnections.roadWidthSum;
+							bestLaneConnections = laneConnections.laneConnections;
+						}
 					}
 				}
 			}
 		}
+		result.addAll(bestLaneConnections);
 		
 		return result;
 		
@@ -531,8 +539,12 @@ public class RoadModule extends ConfigurableWorldModule {
 		
 	}
 	
-	private static void addLaneConnectionsForRoadPairDashes(
-			List<LaneConnection> result,
+	private static class LaneConnectionsRoadWidth {
+		public List<LaneConnection> laneConnections;
+		public float roadWidthSum;
+	}
+	
+	private static LaneConnectionsRoadWidth getLaneConnectionsForRoadPairDashes(
 			MapNode node, Road road1, Road road2,
 			boolean isJunction, boolean isCrossing) {
 		
@@ -567,20 +579,18 @@ public class RoadModule extends ConfigurableWorldModule {
 				findMatchingLanes(lanes1, lanes2, isJunction, isCrossing);
 		
 		/* build the lane connections */
-		
+		LaneConnectionsRoadWidth result = new LaneConnectionsRoadWidth();
+		result.laneConnections = new ArrayList<LaneConnection>();
 		for (int lane1Index : matches.keySet()) {
 			
 			final Lane lane1 = lanes1.get(lane1Index);
 			final Lane lane2 = lanes2.get(matches.get(lane1Index));
 			
-			result.add(buildLaneConnection(lane1, lane2, RoadPart.LEFT,
+			result.laneConnections.add(buildLaneConnection(lane1, lane2, RoadPart.LEFT,
 					!isRoad1Inbound, !isRoad2Inbound));
-			
 		}
-		
-		//TODO: connect "disappearing" lanes to a point on the other side
-		//      or draw caps (only for connectors)
-		
+		result.roadWidthSum = road1.width + road2.width;
+		return result;
 	}
 	
 	private static LaneConnection buildLaneConnection(
