@@ -398,7 +398,7 @@ public class RoadModule extends ConfigurableWorldModule {
 			
 				if (allOneway) {
 					result.addAll(buildLaneConnections_allOneway(node,
-							inboundOnewayRoads, outboundOnewayRoads));
+							inboundOnewayRoads, outboundOnewayRoads, isJunction));
 				}
 				
 			}
@@ -419,7 +419,7 @@ public class RoadModule extends ConfigurableWorldModule {
 			}
 		}
 		
-		// Add more dashes connections between roads with similar angles
+		// Add more lane divider lines connections between roads with similar angles
 		List<LaneConnection> bestLaneConnections = new ArrayList<LaneConnection>();
 		float maxRoadsWidth = 0.0f;
 		for (int i = 0; i < roads.size(); i++) {
@@ -427,11 +427,11 @@ public class RoadModule extends ConfigurableWorldModule {
 				if (i != j) {
 					final Road road1 = roads.get(i);
 					final Road road2 = roads.get(j);
-					final double COS_EPSILON = Math.PI / 32;
+					final double COS_EPSILON = Math.PI / 16;
 					double positiveCosAngle = Math.abs(road1.segment.getDirection().dot(road2.segment.getDirection()));
 					if (1.0 - positiveCosAngle < COS_EPSILON) {
 						
-						LaneConnectionsRoadWidth laneConnections = getLaneConnectionsForRoadPairDashes(
+						LaneConnectionsRoadWidth laneConnections = getLaneConnectionsForRoadPairLines(
 								node, road1, road2,
 								isJunction, isCrossing);
 						if (laneConnections.roadWidthSum >= maxRoadsWidth && !laneConnections.laneConnections.isEmpty()) {
@@ -459,7 +459,7 @@ public class RoadModule extends ConfigurableWorldModule {
 	 */
 	private static List<LaneConnection> buildLaneConnections_allOneway(
 			MapNode node, List<Road> inboundOnewayRoadsLTR,
-			List<Road> outboundOnewayRoadsLTR) {
+			List<Road> outboundOnewayRoadsLTR, boolean isJunction) {
 
 		List<Lane> inboundLanes = new ArrayList<Lane>();
 		List<Lane> outboundLanes = new ArrayList<Lane>();
@@ -482,11 +482,12 @@ public class RoadModule extends ConfigurableWorldModule {
 			
 			final Lane lane1 = inboundLanes.get(lane1Index);
 			final Lane lane2 = outboundLanes.get(matches.get(lane1Index));
-			
-			result.add(buildLaneConnection(lane1, lane2,
-					RoadPart.LEFT, //TODO: road part is not always the same
-					false, true));
-			
+			if (!isJunction || (lane1.type != KERB && lane1.type != SIDEWALK &&
+					lane1.type != DASHED_LINE && lane1.type != SOLID_LINE)) { //Sidewalks tend to look ugly in junctions and lines are dealt with elsewhere
+				result.add(buildLaneConnection(lane1, lane2,
+						RoadPart.LEFT, //TODO: road part is not always the same
+						false, true));
+				}
 		}
 		
 		return result;
@@ -528,9 +529,11 @@ public class RoadModule extends ConfigurableWorldModule {
 			
 			final Lane lane1 = lanes1.get(lane1Index);
 			final Lane lane2 = lanes2.get(matches.get(lane1Index));
-			
-			result.add(buildLaneConnection(lane1, lane2, RoadPart.LEFT,
+			if (!isJunction || (lane1.type != KERB && lane1.type != SIDEWALK &&
+					lane1.type != DASHED_LINE && lane1.type != SOLID_LINE)) { //Sidewalks tend to look ugly in junctions and lines are dealt with elsewhere
+				result.add(buildLaneConnection(lane1, lane2, RoadPart.LEFT,
 					!isRoad1Inbound, !isRoad2Inbound));
+			}
 			
 		}
 		
@@ -544,7 +547,7 @@ public class RoadModule extends ConfigurableWorldModule {
 		public float roadWidthSum;
 	}
 	
-	private static LaneConnectionsRoadWidth getLaneConnectionsForRoadPairDashes(
+	private static LaneConnectionsRoadWidth getLaneConnectionsForRoadPairLines(
 			MapNode node, Road road1, Road road2,
 			boolean isJunction, boolean isCrossing) {
 		
@@ -563,13 +566,13 @@ public class RoadModule extends ConfigurableWorldModule {
 		
 		for (Iterator<Lane> iter = lanes1.listIterator(); iter.hasNext(); ) {
 			Lane l = iter.next();
-			if (l.type != DASHED_LINE) {
+			if (l.type != DASHED_LINE && l.type != SOLID_LINE) {
 				iter.remove();
 			}
 		}
 		for (Iterator<Lane> iter = lanes2.listIterator(); iter.hasNext(); ) {
 			Lane l = iter.next();
-			if (l.type != DASHED_LINE) {
+			if (l.type != DASHED_LINE && l.type != SOLID_LINE) {
 				iter.remove();
 			}
 		}
