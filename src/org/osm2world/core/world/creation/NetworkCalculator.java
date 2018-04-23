@@ -308,7 +308,7 @@ public class NetworkCalculator {
 						break overlapCheck;
 					}
 					
-					if (distance <= widths.get(r1)*0.46 + widths.get(r2)*0.46) {
+					if (distance <= widths.get(r1)*0.5 + widths.get(r2)*0.5) {
 						overlapPossible = true;
 						break overlapCheck;
 					}
