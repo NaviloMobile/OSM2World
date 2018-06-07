@@ -35,4 +35,4 @@ if ! test -e build/OSM2World.jar; then
     ant
 fi
 
-java -Djava.awt.headless=true -Djava.library.path=$lpsolvepath $vmparams -jar build/OSM2World.jar --config texture_config.properties $@
+java -Djava.awt.headless=false -Djava.library.path=$lpsolvepath $vmparams -jar build/OSM2World.jar --config texture_config.properties $@
