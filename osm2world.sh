@@ -16,18 +16,23 @@ MACHINE_TYPE=`uname -m`
 KERNEL_NAME=`uname -s`
 
 if [ ${KERNEL_NAME} == 'Darwin' ]; then
-lpsolvepath="lib/lp_solve/mac"
+    lpsolvepath="lib/lp_solve/mac"
 else
-if [ `java -version 2>&1|grep -c 64-Bit` -gt 0 ]; then
-lpsolvepath="lib/lp_solve/win64"
-  else
-lpsolvepath="lib/lp_solve/win32"
-  fi
+    if [ ${KERNEL_NAME} == 'Linux' ]; then
+	sys_name="ux"
+    else
+	sys_name="win"
+    fi
+    if [ `java -version 2>&1|grep -c 64-Bit` -gt 0 ]; then
+	lpsolvepath="lib/lp_solve/"$sys_name"64"
+    else
+	lpsolvepath="lib/lp_solve/"$sys_name"32"
+    fi
 fi
 
 # run OSM2World
 
-# export LD_LIBRARY_PATH=$lpsolvepath
+export LD_LIBRARY_PATH=$lpsolvepath:$LD_LIBRARY_PATH
 export PATH=$lpsolvepath:$PATH
 
 #Try to compile OSM2World.jar if it doesn't exist
