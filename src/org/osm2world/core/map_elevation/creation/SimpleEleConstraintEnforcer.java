@@ -182,8 +182,8 @@ public final class SimpleEleConstraintEnforcer implements EleConstraintEnforcer 
 			//TODO use clearing
 			
 			switch (c.groundState) {
-			case ABOVE: c.setPosXYZ(c.getPosXYZ().addY(5)); break;
-			case BELOW: c.setPosXYZ(c.getPosXYZ().addY(-5)); break;
+			case ABOVE: c.setPosXYZ(c.getPosXYZ().addY(2)); break;
+			case BELOW: c.setPosXYZ(c.getPosXYZ().addY(-2)); break;
 			default: //stay at ground elevation
 			}
 			
